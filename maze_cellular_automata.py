@@ -3,14 +3,17 @@ import random as rd
 from PIL import Image
 import imageio
 
-def draw_fpentamino(on_grid,start):
-    on_grid[4+start,4+start] = 1
-    on_grid[4+start,5+start] = 1
-    on_grid[5+start,3+start] = 1
-    on_grid[5+start,4+start] = 1
-    on_grid[6+start,4+start] = 1
+def draw_fpentamino(on_grid:np.ndarray,offset:int) -> np.ndarray:
+    # draws an fpentamino on the grid, at a given offset
+    on_grid[4+offset,4+offset] = 1
+    on_grid[4+offset,5+offset] = 1
+    on_grid[5+offset,3+offset] = 1
+    on_grid[5+offset,4+offset] = 1
+    on_grid[6+offset,4+offset] = 1
 
-def count_alive_neighbours(on_grid,size,i,j):
+def count_alive_neighbours(on_grid:np.ndarray,size:int,i:int,j:int) -> int:
+    # counts alive neighbours for cell at i,j on the current grid
+
     # n,nw,w,sw,s,se,e,ne
     # 0,1 ,2, 3,4, 5,6,7
     can_count = [
@@ -69,11 +72,12 @@ def count_alive_neighbours(on_grid,size,i,j):
     return c
 
 
-def next_generation(on_grid, size):
+def next_generation(on_grid:np.ndarray, size:int) -> np.ndarray:
+    # compute the next generation on the grid
+    
     next_grid = np.zeros(shape=(size,size))
     for (i,j) in [(i,j) for i in range(size) for j in range(size)]:
         alive_n = count_alive_neighbours(on_grid,size,i,j)
-        #if i in [4,5,6]:
         
         cur_cell = on_grid[i,j]
         if cur_cell == 1:
@@ -90,52 +94,38 @@ def next_generation(on_grid, size):
                     next_grid[i,j] = 1
             else:
                 next_grid[i,j] = 0
-        #print(str(i)+" "+str(j)+": "+str(alive_n)+" - "+str(on_grid[i,j])+"->"+str(next_grid[i,j]))
     return next_grid
 
-def post_process(grid):
-    p_grid = grid.copy()
-    p_grid[p_grid == '1'] = '@'
-    return p_grid
-
-def to_console(grid):
-    #g = grid.astype(dtype=str)
-    g = grid.copy()
-    g = g.astype(dtype=str)
-    g[g=='1.0'] = '#'
-    g[g=='0.0'] = ' '
-    for elm in g:
-        print(" ".join(elm))
 
 images = []
-def to_image(grid):
+def to_image(grid:np.ndarray) -> list :
     img_grid = grid.copy()
-    #print('img_grid')
-    #print(img_grid)
     img_grid[img_grid==0] = 255
     img_grid[img_grid==1] = 0
     im = Image.fromarray(img_grid)
     if im.mode != 'RGB':
         im = im.convert('RGB')
     images.append(im)
-    #im.save('test.png')
 
-size=100
-n_gen = 300
-grid = np.zeros(shape=(size,size))
 
-draw_fpentamino(grid,50)
-print('starting grid')
-print(grid)
 
-o = next_generation(grid,size)
-#to_console(o)
-to_image(o)
-#print("---")
-for i in range(n_gen-1):
-    o = next_generation(o,size)
-    #to_console(o)
-    to_image(o)
-    print(str(i))
-imageio.mimsave('maze.gif', images)
-#print(grid)
+def main():
+    size=200
+    n_gen = 200
+    grid = np.zeros(shape=(size,size))
+
+    draw_fpentamino(grid,100)
+
+    next_gen= next_generation(grid,size)
+
+    to_image(next_gen)
+
+    for i in range(n_gen-1):
+        next_gen = next_generation(next_gen,size)
+        to_image(next_generation(next_gen,size))
+
+    imageio.mimsave('maze.gif', images)
+
+if __name__ == '__main__':
+    main()
+
