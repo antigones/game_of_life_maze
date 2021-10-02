@@ -22,15 +22,15 @@ import random as rd
 from PIL import Image
 import imageio
 
-def draw_fpentamino(on_grid:np.ndarray,offset:int) -> np.ndarray:
+def draw_fpentamino(on_grid:np.ndarray,at_offset:int) -> np.ndarray:
     """
      draws an f-pentamino on the grid, at a given offset
     """
-    on_grid[4+offset,4+offset] = 1
-    on_grid[4+offset,5+offset] = 1
-    on_grid[5+offset,3+offset] = 1
-    on_grid[5+offset,4+offset] = 1
-    on_grid[6+offset,4+offset] = 1
+    on_grid[4+at_offset,4+at_offset] = 1
+    on_grid[4+at_offset,5+at_offset] = 1
+    on_grid[5+at_offset,3+at_offset] = 1
+    on_grid[5+at_offset,4+at_offset] = 1
+    on_grid[6+at_offset,4+at_offset] = 1
 
 def count_alive_neighbours(on_grid:np.ndarray,size:int,i:int,j:int) -> int:
     """
@@ -158,15 +158,15 @@ def main():
     n_gen = 200
     grid = np.zeros(shape=(size,size))
 
-    draw_fpentamino(grid,100)
+    draw_fpentamino(on_grid=grid,at_offset=100)
 
-    next_gen= next_generation(grid,size)
+    next_gen= next_generation(on_grid=grid,size=size)
     images = []
-    add_grid_to_image_list(next_gen,images)
+    add_grid_to_image_list(grid=next_gen,image_list=images)
 
     for i in range(n_gen-1):
-        next_gen = next_generation(next_gen,size)
-        add_grid_to_image_list(next_gen,images)
+        next_gen = next_generation(on_grid=next_gen,size=size)
+        add_grid_to_image_list(grid=next_gen,image_list=images)
 
     imageio.mimsave('maze.gif', images)
 
