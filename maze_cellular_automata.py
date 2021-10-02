@@ -24,7 +24,7 @@ import imageio
 
 def draw_fpentamino(on_grid:np.ndarray,offset:int) -> np.ndarray:
     """
-     draws an fpentamino on the grid, at a given offset
+     draws an f-pentamino on the grid, at a given offset
     """
     on_grid[4+offset,4+offset] = 1
     on_grid[4+offset,5+offset] = 1
@@ -35,8 +35,10 @@ def draw_fpentamino(on_grid:np.ndarray,offset:int) -> np.ndarray:
 def count_alive_neighbours(on_grid:np.ndarray,size:int,i:int,j:int) -> int:
     """
     counts alive neighbours for current cell at i,j on the current grid
+    
     can_count is an array determining if it makes sense to count that neighbour as alive,
     based on the current examine cell index on the grid
+    can_count_idx is a list of indexes for can_count directions on the grid
     alive_neighbours is the number of alive_neighbours for the current cell
     """
 
@@ -102,7 +104,7 @@ def next_generation(on_grid:np.ndarray, size:int) -> np.ndarray:
     """
     computes the next generation of cells on the grid
     with Maze Life-like cellular automaton Rules
-    
+
     on_grid is the grid on which the computation will be run
     next_grid is the grid as a result of applying the rules
     """
@@ -132,6 +134,9 @@ def next_generation(on_grid:np.ndarray, size:int) -> np.ndarray:
 
 def add_grid_to_image_list(grid:np.ndarray,image_list:list) -> list :
     """
+    creates a copy of the current grid to be converted in an image by replacing 
+    its values with actual pixel colors.
+
     outputs the current grid status to an image, to be added to
     image_list to produce an animated gif
     """
