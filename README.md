@@ -13,3 +13,6 @@ The first pass just run on an f-pentamino resting on a vertical index of 100.
  3. Watch how the automaton evolves by opening maze.gif
 
 ![Maze Like-like automaton evolution](https://github.com/antigones/game_of_life/blob/main/maze.gif)
+
+This work is licensed under a
+[Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License][cc-by-nc-sa].
